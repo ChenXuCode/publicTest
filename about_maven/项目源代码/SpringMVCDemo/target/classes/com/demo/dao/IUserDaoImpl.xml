@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.IUserDAO">
+	<select id="findUserByCodeAndPwd" resultType="com.demo.entity.User">
+	select userId,userCode,userName
+	from t_user
+	where userCode=#{userCode} and userPwd=#{userPwd}
+	</select>
+	<select id="findAllUser" parameterType="java.util.Map" resultType="com.demo.entity.User">
+		select * from(
+			select temp.* ,@rowno:=@rowno+1 num
+			  from(
+			  		select userId,userCode,userPwd,userName,status,telephone,
+			  			   createDate,createUser,updateUser,updateDate
+			  		  from t_user
+			  		  where 1=1
+			  )temp
+		)temp2 limit  #{page.startIndex},#{page.endIndex}
+	</select>
+	<select id="findUserCount" parameterType="java.util.Map" resultType="int">
+		select count(*) from t_user where 1=1      
+	</select>
+	<select id="findMutiCondition" parameterType="java.util.Map" resultType="com.demo.entity.User">
+		select * from(
+			select temp.* ,@rowno:=@rowno+1 num
+			  from(
+			  		select userId,userCode,userPwd,userName,status,telephone,
+			  			   createDate,createUser,updateUser,updateDate
+			  		  from t_user
+			  		  where 1=1
+		<if test="user.userCode!=null and user.userCode!=''">
+			and userCode like concat('%',#{user.userCode},'%')
+		</if>
+			  )temp
+		)temp2 limit  0,#{page.endIndex}
+	</select>
+	<select id="findUserCondition" parameterType="java.util.Map" resultType="int">
+		select count(*) from t_user where 1=1
+		<if test="user.userCode!=null and user.userCode!=''">
+			and userCode like concat('%',#{user.userCode},'%')
+		</if>
+	</select>
+	<select id="findUserByUserId" resultType="com.demo.entity.User">
+		select userId,userCode,userPwd,userName,email,status,telephone,createDate,createUser,updateUser,updateDate
+		  from t_user
+		  where userId=#{userId}
+	</select>
+	<select id="getMaxUserId" resultType="int">
+		select Max(userId)+1 from t_user
+	</select>
+	<insert id="addUser">
+		insert into t_user(userId,userCode,userPwd,userName,email,status,telephone,
+					createUser,createDate,updateUser,updateDate)
+					values(#{userId},#{userCode},#{userPwd},#{userName},#{email},#{status},#{telephone},#{createUser},
+					#{createDate},#{updateUser},#{updateDate})
+	</insert>
+	<update id="editUser">
+		update t_user set userCode =#{userCode},
+						  userName =#{userName},
+						  userPwd =#{userPwd},
+						  telephone =#{telephone},
+						  email =#{email}
+					where userId =#{userId}
+	</update>
+	<delete id="delUser">
+		delete from t_user where userId=#{userId}
+	</delete>
+</mapper>
