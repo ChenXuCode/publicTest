@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.train.biz.basic.dao.StudentDAO">
+  <select id="selectByExampleWithPro"  resultType="java.lang.String">
+     SELECT student.student_id,student.student_name, student.student_gender,
+			 student.dormitory_id,dormitory.building_name,dormitory.dormitory_name,
+			 profession.profession_department,profession.profession_name 
+				FROM
+				student LEFT JOIN dormitory ON dormitory.dormitory_id = student.dormitory_id 
+				LEFT JOIN profession ON profession.profession_id = student.profession_id
+  </select>
+  
+  
+  
+  
+  <select id="findStudentCount"  resultType="int">
+     select count(*) from basic_item 
+  </select>
+  
+    <select id="findItemByItemId"  resultType="com.train.biz.basic.entity.Item">
+     select * from basic_item where itemid = #{0}
+  </select>
+ 
+</mapper>

@@ -1,0 +1,11 @@
+package com.train.biz.basic.service;
+
+import com.train.base.page.Page;
+import com.train.biz.basic.entity.Item;
+
+public interface IItemService {
+  public Page<Item> findAllItems(Page<Item> page,Item item);
+  public Page<Item> findMutiCondition(Page<Item> page,Item item); 
+  public void addItem(Item item);
+  public Integer findItemMaxItemId();
+}

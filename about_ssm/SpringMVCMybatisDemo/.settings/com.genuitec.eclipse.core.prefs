@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+validator.Checked=WebRoot/view,src/com/train/biz/basic/dao/IItemMapper.xml,WebRoot/comm,target,WebRoot/js
+validator.Unchecked=

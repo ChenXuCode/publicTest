@@ -1,0 +1,9 @@
+db.driver=oracle.jdbc.driver.OracleDriver
+db.url=jdbc:oracle:thin:@127.0.0.1:1521:oracleDB
+db.user=wharf
+db.password=wharf
+db.minPoolSize=1
+db.maxPoolSize=3
+db.maxStatements=200
+db.maxStatementsPerConnection=10
+db.maxIdleTime=0

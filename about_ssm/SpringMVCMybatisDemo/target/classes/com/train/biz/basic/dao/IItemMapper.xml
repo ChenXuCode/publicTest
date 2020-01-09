@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.train.biz.basic.dao.IItemDAO">
+  <select id="findAllItems" parameterType="java.util.Map" resultType="com.train.biz.basic.entity.Item">
+     select * from ( 
+		        select temp.* ,@rowno:=@rowno+1 num from (select itemId,itemCode,itemName,itemSpec,itemUnit,itemDrawNo,itemWeight,highPrice,newPrice,lowPrice,useFlag from basic_item) temp 
+		           ) temp2 limit #{page.startIndex},#{page.pagePerRows} 
+  </select>
+  
+  <select id="findItemCount"  resultType="int">
+     select count(*) from basic_item 
+  </select>
+  
+    <select id="findItemByItemId"  resultType="com.train.biz.basic.entity.Item">
+     select * from basic_item where itemid = #{0}
+  </select>
+
+  <select id="findMutiCondition" parameterType="java.util.Map" resultType="com.train.biz.basic.entity.Item">
+    select * from (
+        select itemId,itemCode,itemName,itemSpec,itemUnit,itemDrawNo,itemWeight,highPrice,newPrice,lowPrice,useFlag from basic_item item where 1=1
+    <if test="item.itemCode != null and item.itemCode!=''">
+       and item.itemCode like concat('%',#{item.itemCode},'%')
+    </if> 
+    <if test="item.itemName !=null and item.itemName!=''">
+       and item.itemName like concat('%',#{item.itemName},'%')
+    </if> 
+    <if test="item.itemSpec !=null and item.itemSpec!=''">
+       and item.itemSpec like concat('%',#{item.itemSpec},'%')
+    </if> 
+    ) temp limit #{page.startIndex},#{page.pagePerRows} 
+    
+  </select>
+  
+  <select id="findItemCountByCondition"  resultType="int">
+     select count(*)  from basic_item where 1=1
+     <if test="itemCode !=null and itemCode!=''">
+       and itemCode like concat('%',#{itemCode},'%')
+    </if> 
+    <if test="itemName !=null and itemName!=''">
+        and itemName like concat('%',#{itemName},'%')
+    </if> 
+    <if test="itemSpec !=null and itemSpec!=''">
+        and itemSpec like concat('%',#{itemSpec},'%')
+    </if> 
+  </select>
+  
+  
+  <insert id="addItem">
+     insert into basic_item(itemId,itemCode,itemName,itemSpec,itemUnit,itemDrawNo,itemWeight,useFlag)
+                     values(#{itemId},#{itemCode},#{itemName},#{itemSpec},#{itemUnit},#{itemDrawNo},#{itemWeight},#{useFlag})
+  </insert>
+  <select id="findItemMaxItemId" resultType="int">
+     select max(itemId)+1 from basic_item 
+  </select>
+  
+  
+  	<update id="updateItemById">
+		update basic_item set 
+		itemcode=#{itemCode},
+		itemname=#{itemName},
+		itemunit=#{itemUnit},
+		itemspec=#{itemSpec},
+		itemdrawno=#{itemDrawNo},
+		itemweight=#{itemWeight},
+		useflag=#{useFlag},
+		itemDescription=#{itemDescription} 
+		where itemid=#{itemId}
+	</update>
+  
+  <delete id="deleteItemById">
+		DELETE FROM basic_item WHERE itemid=#{0}
+	</delete>
+  
+</mapper>
